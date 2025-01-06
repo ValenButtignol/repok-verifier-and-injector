@@ -1,6 +1,7 @@
 package system;
 
 import java.io.File;
+import java.io.FileWriter;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -12,7 +13,10 @@ public class Main {
         CodeParser codeParser = new SimpleCodeParser("app/src/main/resources/repok1.txt");
         try {
             // Ruta al archivo Java (el archivo puede no tener una clase)
-            File file = new File("Example.java");
+            File file = new File("RepOkClass.java");
+            FileWriter writer = new FileWriter(file);
+            writer.write(codeParser.parse());
+            writer.close();
 
             // Analiza el archivo y crea un CompilationUnit
             CompilationUnit compilationUnit = StaticJavaParser.parse(file);

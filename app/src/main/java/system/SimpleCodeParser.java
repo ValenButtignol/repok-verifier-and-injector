@@ -20,10 +20,12 @@ public class SimpleCodeParser implements CodeParser {
     public String parse() {
         this.readFile();
 
-        startIndex = inputBuilder.indexOf(Delimiters.START_CODE_SNIPPET) + Delimiters.START_CODE_SNIPPET.length();
-        endIndex = inputBuilder.indexOf(Delimiters.END_CODE_SNIPPET, startIndex);
+        startIndex = inputBuilder.indexOf(StringConstants.START_CODE_SNIPPET) + StringConstants.START_CODE_SNIPPET.length();
+        endIndex = inputBuilder.indexOf(StringConstants.END_CODE_SNIPPET, startIndex);
 
-        codeSnippet = inputBuilder.substring(startIndex, endIndex);
+        codeSnippet = StringConstants.PREFIX_CLASS_TEMPLATE;
+        codeSnippet += inputBuilder.substring(startIndex, endIndex);
+        codeSnippet += StringConstants.SUFFIX_CLASS_TEMPLATE;
         return codeSnippet;
     }
     
