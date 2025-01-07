@@ -12,25 +12,32 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 public class RepOkInjector {
     private File classFile;
     private String className;
-    private String repOkString;
+    private String repOkClassString;
     
-    public RepOkInjector(String classPath, String className, String repOkString) {
+    public RepOkInjector(String classPath, String className, String repOkClassString) {
         classFile = new File(classPath);
         this.className = className;
-        this.repOkString = repOkString;
+        this.repOkClassString = repOkClassString;
     }
 
     public void injectRepOk() {
         try {
-            CompilationUnit cu = StaticJavaParser.parse(classFile);
-            ClassOrInterfaceDeclaration linkedListClass = cu.getClassByName(className).orElseThrow(() -> new RuntimeException("Clase LinkedList no encontrada"));
+            CompilationUnit classCu = StaticJavaParser.parse(classFile);
+            CompilationUnit repOkCu = StaticJavaParser.parse(repOkClassString);
+            
+            ClassOrInterfaceDeclaration classDeclaration = classCu.getClassByName(className).orElseThrow(
+                () -> new RuntimeException("Class: " + className + " not found")
+            );
 
-            MethodDeclaration repOKMethod = StaticJavaParser.parseMethodDeclaration(repOkString);
-            System.out.println(cu.toString());
-            //linkedListClass.addMember(repOKMethod);
-            //FileWriter writer = new FileWriter(classFile);
-            //writer.write(cu.toString());
-            //writer.close();
+            repOkCu.findAll(MethodDeclaration.class).forEach(method -> {
+                classDeclaration.addMember(method);
+                System.out.println(method.toString());
+            });
+
+            FileWriter writer = new FileWriter(classFile);
+            writer.write(classCu.toString());
+            writer.close();
+        
         } catch (Exception e) {
             e.printStackTrace();
         }
