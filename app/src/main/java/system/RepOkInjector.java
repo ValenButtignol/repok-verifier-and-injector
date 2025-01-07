@@ -8,7 +8,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-
 public class RepOkInjector {
     private File classFile;
     private String className;
@@ -29,7 +28,11 @@ public class RepOkInjector {
                 () -> new RuntimeException("Class: " + className + " not found")
             );
 
+            classCu.addImport("java.*");
             repOkCu.findAll(MethodDeclaration.class).forEach(method -> {
+                if (method.getNameAsString().equals("repOK")) {
+                    method.addAnnotation("CheckRep");
+                };
                 classDeclaration.addMember(method);
                 System.out.println(method.toString());
             });
