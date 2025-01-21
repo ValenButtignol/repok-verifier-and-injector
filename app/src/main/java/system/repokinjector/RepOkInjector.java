@@ -1,4 +1,4 @@
-package system;
+package system.repokinjector;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,8 +27,10 @@ public class RepOkInjector {
             ClassOrInterfaceDeclaration classDeclaration = classCu.getClassByName(className).orElseThrow(
                 () -> new RuntimeException("Class: " + className + " not found")
             );
+            
+            classCu.addImport("java.util.*");               // In case the repOk uses java.util.*.
+            classCu.addImport("randoop.CheckRep");   // For the @CheckRep annotation.
 
-            classCu.addImport("java.*");
             repOkCu.findAll(MethodDeclaration.class).forEach(method -> {
                 if (method.getNameAsString().equals("repOK")) {
                     method.addAnnotation("CheckRep");
