@@ -50,7 +50,7 @@ test {
 
 // This is the resources folder
 tasks.named('run') {
-    workingDir = file("$projectDir/src/main/java/specclasses")
+    workingDir = file("$projectDir/..")
 }
 
 
