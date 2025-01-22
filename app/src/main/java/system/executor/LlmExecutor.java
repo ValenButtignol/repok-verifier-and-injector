@@ -2,11 +2,18 @@ package system.executor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import system.StringConstants;
 import system.completion.RepOkCompletion;
 
 public abstract class LlmExecutor {
+
+    private static final Logger LOGGER = Logger.getLogger(LlmExecutor.class.getName());
+    private static final String PYTHON_PATH = "python3";
+    private static final String SCRIPT_PATH = "tools/llm-repok-generator/main.py";
+    private static final String OUTPUT_TYPE = "console";
 
     protected String classString;
     protected String modelName;
@@ -20,50 +27,50 @@ public abstract class LlmExecutor {
         this.promptType = promptType;
     }
 
-    // TODO: VER si hacen falta solo dos métodos y en algunos se implementan unos y en otros no.
-    // Porque acá habría mucho código repetido.
     public abstract RepOkCompletion getRepOkCompletion();
 
     public String execute() {
-        System.out.println("Ejecutando LlmExecutor");
-        String pythonPath = "python3";
-        String scriptPath = "../../../../llm-repok-generator/main.py"; 
+        String[] command = buildCommand();
+        StringBuilder output = new StringBuilder();
 
-        // Script args
-        String[] command = {
-            pythonPath,
-            scriptPath,
-            "-mn", modelName,
-            "-pc", classString, 
-            "-pt", promptType,
-            "-ot", "console"
-        };
-        
-        String output = "";
         try {
-            System.out.println("Ejecutando comando: ");
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);
 
             Process process = processBuilder.start();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            Integer separatorAppearences = 0;
-            while ((line = reader.readLine()) != null) {
-                separatorAppearences += line.equals(StringConstants.PROMPT_SEPARATOR) ? 1 : 0;
-                if (separatorAppearences < 3) {
-                    continue;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                int separatorCount = 0;
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (StringConstants.PROMPT_SEPARATOR.equals(line)) {
+                        separatorCount++;
+                    }
+                    if (separatorCount >= 3) {
+                        output.append(line).append("\n");
+                    }
                 }
-                output += line + "\n";
             }
 
             int exitCode = process.waitFor();
-            System.out.println("El proceso terminó con código: " + exitCode);
-
+            if (exitCode != 0) {
+                LOGGER.log(Level.WARNING, "WARNING: Process exited with non-zero code: " + exitCode);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error while executing LLM script", e);
         }
-        return output;
-    };
+
+        return output.toString();
+    }
+
+    private String[] buildCommand() {
+        return new String[] {
+            PYTHON_PATH,
+            SCRIPT_PATH,
+            "-mn", modelName,
+            "-pc", classString,
+            "-pt", promptType,
+            "-ot", OUTPUT_TYPE
+        };
+    }
 }
