@@ -14,7 +14,7 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
@@ -46,6 +46,11 @@ test {
 		}
 	}
 
+}
+
+// This is the resources folder
+tasks.named('run') {
+    workingDir = file("$projectDir/src/main/java/specclasses")
 }
 
 
