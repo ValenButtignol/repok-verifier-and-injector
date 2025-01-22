@@ -1,0 +1,3 @@
+[submodule "tools/llm-repok-generator"]
+	path = tools/llm-repok-generator
+	url = https://github.com/ValenButtignol/llm-repok-generator.git
