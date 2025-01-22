@@ -3,6 +3,7 @@ package system.executor;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import system.StringConstants;
 import system.completion.RepOkCompletion;
 
 public abstract class LlmExecutor {
@@ -26,7 +27,7 @@ public abstract class LlmExecutor {
     public String execute() {
         System.out.println("Ejecutando LlmExecutor");
         String pythonPath = "python3";
-        String scriptPath = "llm-repok-generator/main.py"; 
+        String scriptPath = "../../../../llm-repok-generator/main.py"; 
 
         // Script args
         String[] command = {
@@ -35,7 +36,7 @@ public abstract class LlmExecutor {
             "-mn", modelName,
             "-pc", classString, 
             "-pt", promptType,
-            "-ot", "console"     //TODO implement a "return" type of prompt.
+            "-ot", "console"
         };
         
         String output = "";
@@ -48,8 +49,12 @@ public abstract class LlmExecutor {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
+            Integer separatorAppearences = 0;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                separatorAppearences += line.equals(StringConstants.PROMPT_SEPARATOR) ? 1 : 0;
+                if (separatorAppearences < 3) {
+                    continue;
+                }
                 output += line + "\n";
             }
 
