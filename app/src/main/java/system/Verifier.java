@@ -7,7 +7,7 @@ public class Verifier {
     public Integer verify() {
         Integer exitCode = -1;
 
-        String scriptPath = "./../scripts/verifier.sh";
+        String scriptPath = StringConstants.RANDOOP_SCRIPT_PATH;
         ProcessBuilder processBuilder = new ProcessBuilder(scriptPath);
         processBuilder.redirectErrorStream(true);
 
