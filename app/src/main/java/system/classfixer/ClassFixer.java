@@ -35,6 +35,10 @@ public class ClassFixer {
     }
     
     public File generateCopy() {
+        System.out.println(StringConstants.CLASS_FIXER_PATH);
+        System.out.println(StringConstants.CLASS_FIXER_PATH + className + ".java");
+        System.out.println(StringConstants.CLASS_FIXER_PATH);
+        System.out.println(StringConstants.CLASS_FIXER_PATH);
         copyFile = new File(classCopyPath);
         
         try {

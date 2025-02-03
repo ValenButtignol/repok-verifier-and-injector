@@ -10,6 +10,6 @@ public class StringConstants {
     public static final String PROPERTIES_CLASS_PATH = "../PropertiesClass.java";
     public static final String PROPERTIES_CLASS_NAME = "PropertiesClass";
     public static final String PACKAGE_DECL = "system.classfixer.classes";
-    public static final String CLASS_FIXER_PATH = "src/main/java/system/classfixer/classes";
+    public static final String CLASS_FIXER_PATH = "src/main/java/system/classfixer/classes/";
     public static final String CLASS_LIST_FILE_PATH = "src/main/resources/classlist.txt";
 }
