@@ -8,4 +8,7 @@ build
 
 /app/bin
 
-randoop-all-4.3.2.jar
+app/src/main/java/system/classfixer/classes/
+
+logs
+tools
