@@ -1,40 +1,45 @@
-package system;
+package system.codeinjector;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.List;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-public class RepOkInjector {
+public class RepOkInjector implements CodeInjector {
     private File classFile;
     private String className;
-    private String repOkClassString;
+    private List<MethodDeclaration> repOkMethods;
+    private CompilationUnit classCu;
     
-    public RepOkInjector(String classPath, String className, String repOkClassString) {
-        classFile = new File(classPath);
+    public RepOkInjector(File classFile, String className, List<MethodDeclaration> repOkMethods) {
+        this.classFile = classFile;
         this.className = className;
-        this.repOkClassString = repOkClassString;
+        this.repOkMethods = repOkMethods;
+        try {
+            this.classCu = StaticJavaParser.parse(classFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void injectRepOk() {
+    public void inject() {
         try {
-            CompilationUnit classCu = StaticJavaParser.parse(classFile);
-            CompilationUnit repOkCu = StaticJavaParser.parse(repOkClassString);
-            
             ClassOrInterfaceDeclaration classDeclaration = classCu.getClassByName(className).orElseThrow(
                 () -> new RuntimeException("Class: " + className + " not found")
             );
 
-            classCu.addImport("java.*");
-            repOkCu.findAll(MethodDeclaration.class).forEach(method -> {
+            classCu.addImport("java.util.*");
+            classCu.addImport("randoop.CheckRep");
+
+            repOkMethods.forEach(method -> {
                 if (method.getNameAsString().equals("repOK")) {
                     method.addAnnotation("CheckRep");
                 };
                 classDeclaration.addMember(method);
-                System.out.println(method.toString());
             });
 
             FileWriter writer = new FileWriter(classFile);
