@@ -27,6 +27,6 @@ if grep -q "Error" ../logs/randoop.log; then
     echo "Error: Error test generated. Check repOk."
     exit 0
 else
-    echo "Success: Class have been tested succesfully."
+    echo "Success: Class has been tested succesfully."
     exit 1
 fi
