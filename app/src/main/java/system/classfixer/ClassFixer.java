@@ -2,9 +2,11 @@ package system.classfixer;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Optional;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.PackageDeclaration;
 
 import system.StringConstants;
 
@@ -21,6 +23,7 @@ public class ClassFixer {
     private CompilationUnit classCu;
     private String classCopyPath;
     private File copyFile;
+    private Optional<PackageDeclaration> oldPackage;
 
     public ClassFixer(String classPath, String className) {
         this.classPath = classPath;
@@ -37,9 +40,12 @@ public class ClassFixer {
     public File generateCopy() {
         copyFile = new File(classCopyPath);
         
+        oldPackage = classCu.getPackageDeclaration();
+        classCu.setPackageDeclaration(StringConstants.PACKAGE_DECL);
+        classCu.addImport("java.util.*");
+        classCu.addImport("randoop.CheckRep");
+        
         try {
-            classCu.setPackageDeclaration(StringConstants.PACKAGE_DECL);
-            
             FileWriter writer = new FileWriter(copyFile);
             writer.write(classCu.toString());
             writer.close();
@@ -60,5 +66,23 @@ public class ClassFixer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void copyBack() {
+        try {
+            CompilationUnit copyClassCu = StaticJavaParser.parse(copyFile);
+            copyClassCu.setPackageDeclaration(oldPackage.orElse(null));
+            copyClassCu.getImports().removeIf(i -> i.getNameAsString().equals("randoop.CheckRep"));
+
+            FileWriter writer = new FileWriter(classFile, false);
+            writer.write(copyClassCu.toString());
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteCopy() {
+        copyFile.delete();
     }
 }
