@@ -1,4 +1,4 @@
-package system;
+package system.invhandler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,13 +12,15 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-public class InvariantHandler {
+import system.StringConstants;
+
+public abstract class InvariantHandler {
     
-    private File classFile;
-    private String className;
-    private List<MethodDeclaration> verifiedInvariants;
-    private List<MethodDeclaration> lastInjections;
-    private CompilationUnit classCu;
+    protected File classFile;
+    protected String className;
+    protected List<MethodDeclaration> verifiedInvariants;
+    protected List<MethodDeclaration> lastInjections;
+    protected CompilationUnit classCu;
     
     public InvariantHandler(File classFile, String className) {
         this.classFile = classFile;
@@ -30,11 +32,6 @@ public class InvariantHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void setUpClass() {
-        classCu.addImport("java.util.*");
-        classCu.addImport("randoop.CheckRep");
     }
 
     public void inject(MethodDeclaration method) {
@@ -94,6 +91,8 @@ public class InvariantHandler {
     public List<MethodDeclaration> getVerifiedInvariants() {
         return verifiedInvariants;
     }
+
+    public abstract void buildRepOk();
 
     private void writeClass() {
         try {
