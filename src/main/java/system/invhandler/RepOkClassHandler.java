@@ -2,9 +2,9 @@ package system.invhandler;
 
 import java.io.File;
 
-public class RepOkHandler extends InvariantHandler {
+public class RepOkClassHandler extends InvariantHandler {
     
-    public RepOkHandler(File classFile, String className) {
+    public RepOkClassHandler(File classFile, String className) {
         super(classFile, className);
     }
 

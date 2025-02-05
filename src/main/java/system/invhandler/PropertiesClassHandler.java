@@ -6,8 +6,8 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-public class PropertiesHandler extends InvariantHandler {
-    public PropertiesHandler(File classFile, String className) {
+public class PropertiesClassHandler extends InvariantHandler {
+    public PropertiesClassHandler(File classFile, String className) {
         super(classFile, className);
     }
 
