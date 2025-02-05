@@ -8,7 +8,7 @@ import system.factories.HandlerAndParserFactory;
 import system.invhandler.InvariantHandler;
 import system.invparser.InvariantParser;
 
-public class System {
+public class RepOkVerifierAndInjectorSystem {
 
     private HandlerAndParserAbstractFactory handlerAndParserAbstractFactory;
     private HandlerAndParserFactory handlerAndParserFactory;
@@ -19,7 +19,7 @@ public class System {
     private String className;
     private String promptType;
 
-    public System(String classPath, String className, String promptType) {
+    public RepOkVerifierAndInjectorSystem(String classPath, String className, String promptType) {
         this.classPath = classPath;
         this.className = className;
         this.promptType = promptType;
@@ -78,6 +78,4 @@ public class System {
         classFixer.copyBack();
         classFixer.deleteCopy();
     }
-
-    
 }

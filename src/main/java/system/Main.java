@@ -2,10 +2,14 @@ package system;
 
 public class Main {
     public static void main(String[] args) {
-        String classPath = "LinkedList.java";
-        String className = "LinkedList";
-        String promptType = StringConstants.GLOBAL_PROMPT_TYPE;
-        System system = new System(classPath, className, promptType);
+        if (args.length < 3) {
+            System.out.println("Arguments: <classPath> <className> <promptType>");
+        }
+
+        String classPath = args[0];
+        String className = args[1];
+        String promptType = args[2];
+        RepOkVerifierAndInjectorSystem system = new RepOkVerifierAndInjectorSystem(classPath, className, promptType);
         system.run();
     }
 }
