@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         if (args.length < 3) {
             System.out.println("Arguments: <classPath> <className> <promptType>");
+            throw new IllegalArgumentException("Invalid number of arguments");
         }
 
         String classPath = args[0];
