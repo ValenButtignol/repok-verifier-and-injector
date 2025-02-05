@@ -52,7 +52,7 @@ tasks.register('runRandoop', JavaExec) {
     description = 'Execute randoop for testing'
 
     classpath = files(
-        '../tools/randoop-all-4.3.2.jar',           // Randoop JAR
+        'tools/randoop-all-4.3.2.jar',           // Randoop JAR
         "$buildDir/classes/java/main",              // Compiled classes
         "$buildDir/resources/main"                 // Resources, if any
     )

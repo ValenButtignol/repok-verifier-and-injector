@@ -1,4 +1,4 @@
-package system.codeparser;
+package system.invparser;
 
 import java.util.List;
 

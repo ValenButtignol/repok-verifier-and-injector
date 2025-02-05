@@ -6,11 +6,11 @@ build
 
 /.vscode
 
-/app/bin
+/bin
 
-app/src/main/java/system/classfixer/classes/
+src/main/java/system/classfixer/classes/
 
 logs
 tools
 
-app/src/test/java
+src/test/java

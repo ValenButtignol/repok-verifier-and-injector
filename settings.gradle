@@ -11,4 +11,3 @@ plugins {
 }
 
 rootProject.name = 'parser-and-code-injector'
-include('app')

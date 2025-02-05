@@ -3,18 +3,18 @@ package system;
 import java.io.File;
 
 import system.classfixer.ClassFixer;
-import system.codeparser.InvariantParser;
-import system.codeparser.PropertiesClassParser;
-import system.codeparser.RepOkClassParser;
 import system.invhandler.InvariantHandler;
 import system.invhandler.PropertiesHandler;
 import system.invhandler.RepOkHandler;
+import system.invparser.InvariantParser;
+import system.invparser.PropertiesClassParser;
+import system.invparser.RepOkClassParser;
 
 public class Main {
     public static void main(String[] args) {
         String classPath = "src/../../LinkedList.java";
         String className = "LinkedList";
-        
+        //String promptType = "";
 
         ClassFixer classFixer = new ClassFixer(classPath, className);
         classFixer.rewriteClassList();
@@ -44,14 +44,6 @@ public class Main {
         });
         invariantHandler.buildRepOk();
         classFixer.copyBack();
-
-        System.out.println(invariantHandler.getVerifiedInvariants());
-        
-
-
-        // TODO: In some way i need to add the repOk method to the original class
-        
-        //classFixer.deleteCopy();
-
+        classFixer.deleteCopy();
     }
 }
