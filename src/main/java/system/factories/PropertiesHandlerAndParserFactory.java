@@ -2,7 +2,6 @@ package system.factories;
 
 import java.io.File;
 
-import system.StringConstants;
 import system.invhandler.InvariantHandler;
 import system.invhandler.PropertiesClassHandler;
 import system.invparser.InvariantParser;
