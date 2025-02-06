@@ -11,8 +11,9 @@ public class PropertiesHandlerAndParserFactory implements HandlerAndParserFactor
     
     private File classFile;
     private String className;
+    private String specsClassPath;
 
-    public PropertiesHandlerAndParserFactory(File classFile, String className) {
+    public PropertiesHandlerAndParserFactory(File classFile, String className, String specsClassPath) {
         this.classFile = classFile;
         this.className = className;
     }
@@ -24,6 +25,6 @@ public class PropertiesHandlerAndParserFactory implements HandlerAndParserFactor
 
     @Override
     public InvariantParser createParser() {
-        return new PropertiesClassParser();
+        return new PropertiesClassParser(specsClassPath);
     }
 }

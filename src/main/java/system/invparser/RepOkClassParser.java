@@ -8,17 +8,15 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-import system.StringConstants;
-
 public class RepOkClassParser implements InvariantParser {
 
     private List<MethodDeclaration> invariants;
     private CompilationUnit repOkCu;
 
-    public RepOkClassParser() {
+    public RepOkClassParser(String specsClassPath) {
         this.invariants = new LinkedList<>();
         try {
-            this.repOkCu = StaticJavaParser.parse(new File(StringConstants.REPOK_CLASS_PATH));
+            this.repOkCu = StaticJavaParser.parse(new File(specsClassPath));
         } catch (Exception e) {
             e.printStackTrace();
         }

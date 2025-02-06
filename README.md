@@ -9,7 +9,7 @@ wget -P tools https://github.com/randoop/randoop/releases/download/v4.3.2/randoo
 
 ### Execute program
 ```
-gradle run --args="<classPath> <className> <promptType>"
+gradle run --args="<classPath> <className> <promptType> <specsClassPath>"
 ```
 
 ### Notes

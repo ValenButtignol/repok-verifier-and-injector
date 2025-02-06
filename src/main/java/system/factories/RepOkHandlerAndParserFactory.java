@@ -11,10 +11,12 @@ public class RepOkHandlerAndParserFactory implements HandlerAndParserFactory {
     
     private File classFile;
     private String className;
+    private String specsClassPath;
 
-    public RepOkHandlerAndParserFactory(File classFile, String className) {
+    public RepOkHandlerAndParserFactory(File classFile, String className, String specsClassPath) {
         this.classFile = classFile;
         this.className = className;
+        this.specsClassPath = specsClassPath;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class RepOkHandlerAndParserFactory implements HandlerAndParserFactory {
 
     @Override
     public InvariantParser createParser() {
-        return new RepOkClassParser();
+        return new RepOkClassParser(specsClassPath);
     }
     
 }

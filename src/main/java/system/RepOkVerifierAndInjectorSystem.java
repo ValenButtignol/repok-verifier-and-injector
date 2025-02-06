@@ -18,16 +18,18 @@ public class RepOkVerifierAndInjectorSystem {
     private String classPath;
     private String className;
     private String promptType;
+    private String specsClassPath;
 
-    public RepOkVerifierAndInjectorSystem(String classPath, String className, String promptType) {
+    public RepOkVerifierAndInjectorSystem(String classPath, String className, String promptType, String specsClassPath) {
         this.classPath = classPath;
         this.className = className;
         this.promptType = promptType;
+        this.specsClassPath = specsClassPath;
 
         classFixer = new ClassFixer(classPath, className);
         classFixer.rewriteClassList();
         File classFile = classFixer.generateCopy();
-        handlerAndParserAbstractFactory = new HandlerAndParserAbstractFactory(promptType, classFile, className);
+        handlerAndParserAbstractFactory = new HandlerAndParserAbstractFactory(promptType, classFile, className, specsClassPath);
         handlerAndParserFactory = handlerAndParserAbstractFactory.create();
         invariantHandler = handlerAndParserFactory.createHandler();
         invariantParser = handlerAndParserFactory.createParser();
