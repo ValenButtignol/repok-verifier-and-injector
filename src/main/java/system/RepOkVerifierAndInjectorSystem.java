@@ -58,6 +58,7 @@ public class RepOkVerifierAndInjectorSystem {
     }
 
     public void runForRepOkClass() {
+        invariantHandler.cleanLogs();
         invariantParser.parse();
         invariantParser.getInvariants().forEach(method -> {
             invariantHandler.inject(method);
@@ -68,8 +69,9 @@ public class RepOkVerifierAndInjectorSystem {
         classFixer.copyBack();
         classFixer.deleteCopy();
     }
-
+    
     public void runForPropertiesClass() {
+        invariantHandler.cleanLogs();
         invariantParser.parse();
         invariantParser.getInvariants().forEach(method -> {
             invariantHandler.inject(method);

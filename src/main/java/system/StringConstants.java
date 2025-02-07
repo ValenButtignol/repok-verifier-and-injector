@@ -9,6 +9,8 @@ public class StringConstants {
     
     public static final String PACKAGE_DECL = "system.classfixer.classes";
     
+    public static final String RANDOOP_LOG_PATH = "logs/randoop.log";
+    public static final String COMPILE_LOG_PATH = "logs/compile.log";
     public static final String CLASS_FIXER_PATH = "src/main/java/system/classfixer/classes/";
     public static final String CLASS_LIST_FILE_PATH = "src/main/resources/classlist.txt";
     

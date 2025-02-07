@@ -104,4 +104,11 @@ public abstract class InvariantHandler {
         }
     }
 
+    public void cleanLogs() {
+        File randoopLog = new File(StringConstants.RANDOOP_LOG_PATH);
+        File compileLog = new File(StringConstants.COMPILE_LOG_PATH);
+        randoopLog.delete();
+        compileLog.delete();
+    }
+
 }
