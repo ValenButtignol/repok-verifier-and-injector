@@ -16,6 +16,7 @@ public class PropertiesHandlerAndParserFactory implements HandlerAndParserFactor
     public PropertiesHandlerAndParserFactory(File classFile, String className, String specsClassPath) {
         this.classFile = classFile;
         this.className = className;
+        this.specsClassPath = specsClassPath;
     }
 
     @Override
