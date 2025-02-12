@@ -1,0 +1,47 @@
+package system;
+
+import java.io.*;
+import java.util.*;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+
+public class JavaClassEditor {
+    private File classFile;
+    private CompilationUnit classCu;
+    private ClassOrInterfaceDeclaration classDeclaration;
+
+    public JavaClassEditor(File classFile, String className) throws IOException {
+        this.classFile = classFile;
+        this.classCu = StaticJavaParser.parse(classFile);
+        this.classDeclaration = classCu.getClassByName(className).orElseThrow(
+            () -> new RuntimeException("Class: " + className + " not found")
+        );
+    }
+
+    public ClassOrInterfaceDeclaration getClassDeclaration() {
+        return classDeclaration;
+    }
+
+    public void addMethod(MethodDeclaration method) {
+        classDeclaration.addMember(method);
+    }
+
+    public void removeMethod(MethodDeclaration method) {
+        classDeclaration.remove(method);
+    }
+
+    public boolean isInvariant(MethodDeclaration method) {
+        return method.getNameAsString().equals(StringConstants.REPOK_METHOD_NAME) || 
+            method.getNameAsString().startsWith(StringConstants.PROP_METHOD_NAME);
+    }
+
+    public void writeToFile() {
+        try (FileWriter writer = new FileWriter(classFile)) {
+            writer.write(classCu.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
