@@ -30,7 +30,6 @@ public class RepOkVerifierAndInjectorSystem {
     }
 
     public void run() {
-        invariantHandler.cleanLogs();
         invariantParser.parse();
         invariantParser.getParsedMethods().forEach(method -> {
             invariantHandler.inject(method);

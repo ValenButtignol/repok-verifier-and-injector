@@ -13,7 +13,13 @@ public class InvariantVerifier {
         try {
             Process process = processBuilder.start();
             int exitCode = process.waitFor();
-            if (exitCode == 1) {
+
+            if (exitCode == -1) {
+                System.out.println("\u001B[31mERROR\u001B[0m: Check logs.");
+            } else if (exitCode == 0) {
+                System.out.println("\u001B[31mERROR\u001B[0m: Error test generated. Check repOk.");
+            } else {
+                System.out.println("\u001B[32mSUCCESS\u001B[0m: Class invariant verified.");
                 verified.addAll(methods);
             }
         } catch (Exception e) {
