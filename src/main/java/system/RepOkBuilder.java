@@ -44,18 +44,18 @@ public class RepOkBuilder {
     }
 
     private boolean repOkExists() {
-        return classEditor.getClassDeclaration().getMethodsByName("repOk").size() > 0;
+        return classEditor.getClassDeclaration().getMethodsByName(StringConstants.REPOK_METHOD_NAME).size() > 0;
     }
 
     private void appendToRepOk(StringBuilder newRepOkBody) {
-        MethodDeclaration repOk = classEditor.getClassDeclaration().getMethodsByName("repOk").get(0);
+        MethodDeclaration repOk = classEditor.getClassDeclaration().getMethodsByName(StringConstants.REPOK_METHOD_NAME).get(0);
 
         deleteReturnTrue(repOk);
         
-        classEditor.getClassDeclaration().getMethodsByName("repOk")
+        classEditor.getClassDeclaration().getMethodsByName(StringConstants.REPOK_METHOD_NAME)
             .get(0).getBody().ifPresent(body -> body.addStatement(newRepOkBody.toString()));  
         
-        classEditor.getClassDeclaration().getMethodsByName("repOk")
+        classEditor.getClassDeclaration().getMethodsByName(StringConstants.REPOK_METHOD_NAME)
             .get(0).getBody().ifPresent(body -> body.addStatement("return true;"));
 
     }
@@ -72,7 +72,7 @@ public class RepOkBuilder {
 
     private void createRepOk(StringBuilder repOkBody) {
         MethodDeclaration repOkMethod = new MethodDeclaration()
-            .setName("repOk")
+            .setName(StringConstants.REPOK_METHOD_NAME)
             .setType("boolean")
             .setModifiers(com.github.javaparser.ast.Modifier.Keyword.PUBLIC)
             .setBody(StaticJavaParser.parseBlock( "{" + repOkBody.toString() + " return true }"));

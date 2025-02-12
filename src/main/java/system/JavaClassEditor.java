@@ -32,11 +32,6 @@ public class JavaClassEditor {
         classDeclaration.remove(method);
     }
 
-    public boolean isInvariant(MethodDeclaration method) {
-        return method.getNameAsString().equals(StringConstants.REPOK_METHOD_NAME) || 
-            method.getNameAsString().startsWith(StringConstants.PROP_METHOD_NAME);
-    }
-
     public void writeToFile() {
         try (FileWriter writer = new FileWriter(classFile)) {
             writer.write(classCu.toString());
