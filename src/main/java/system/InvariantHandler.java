@@ -17,6 +17,8 @@ public class InvariantHandler {
     }
 
     public void inject(MethodDeclaration method) {
+        String uniqueName = classEditor.getUniqueMethodName(method.getNameAsString());
+        method.setName(uniqueName);
         classEditor.addMethod(method);
         lastInjections.add(method);
         classEditor.writeToFile();

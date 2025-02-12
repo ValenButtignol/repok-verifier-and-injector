@@ -32,6 +32,16 @@ public class JavaClassEditor {
         classDeclaration.remove(method);
     }
 
+    public String getUniqueMethodName(String baseName) {
+        int count = 0;
+        for (MethodDeclaration method : classDeclaration.getMethods()) {
+            if (method.getNameAsString().startsWith(baseName)) {
+                count++;
+            }
+        }
+        return count > 0 ? baseName + "_" + (count + 1) : baseName;
+    }
+
     public void writeToFile() {
         try (FileWriter writer = new FileWriter(classFile)) {
             writer.write(classCu.toString());
