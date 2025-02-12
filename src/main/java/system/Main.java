@@ -2,16 +2,16 @@ package system;
 
 public class Main {
     public static void main(String[] args) {
-        if (args.length < 4) {
-            System.out.println("Arguments: <classPath> <className> <promptType> <specsClassPath>");
+        if (args.length < 3) {
+            System.out.println("Arguments: <classPath> <className> <invariantClassPath>");
             throw new IllegalArgumentException("Invalid number of arguments");
         }
 
         String classPath = args[0];
         String className = args[1];
-        String promptType = args[2];
-        String specsClassPath = args[3];
-        RepOkVerifierAndInjectorSystem system = new RepOkVerifierAndInjectorSystem(classPath, className, promptType, specsClassPath);
+        String invariantClassPath = args[2];
+
+        RepOkVerifierAndInjectorSystem system = new RepOkVerifierAndInjectorSystem(classPath, className, invariantClassPath);
         system.run();
     }
 }
