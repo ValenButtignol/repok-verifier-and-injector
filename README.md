@@ -9,12 +9,5 @@ wget -P tools https://github.com/randoop/randoop/releases/download/v4.3.2/randoo
 
 ### Execute program
 ```
-gradle run --args="<classPath> <className> <promptType> <specsClassPath>"
+gradle run --args="<classPath> <className> <invClassPath>"
 ```
-
-### Notes
-Keep in mind that the program searches for one of two files:
-- `PropertiesClass.java`
-- `RepOkClass.java`
-
-This are the classes files that must contain the methods to inyect in the class.
