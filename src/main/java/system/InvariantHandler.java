@@ -38,8 +38,12 @@ public class InvariantHandler {
         repOkBuilder.addVerifiedInvariants(validInvariants);
     }
 
-    public void buildRepOk() {
-        repOkBuilder.updateOrCreateRepOk();
+    public void updateRepOk() {
+        repOkBuilder.updateRepOk();
+    }
+
+    public void createRepOk() {
+        repOkBuilder.createRepOk();
     }
 
     public void cleanLogs() {

@@ -57,11 +57,22 @@ public class ClassFixer {
         return copyFile;
     }
 
-    public void rewriteClassList() {
+    public void writeClassList() {
         File classListFile = new File(StringConstants.CLASS_LIST_FILE_PATH);
         try {
             FileWriter writer = new FileWriter(classListFile);
             writer.write(StringConstants.PACKAGE_DECL + "." + className + "\n");
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteClassList() {
+        File classListFile = new File(StringConstants.CLASS_LIST_FILE_PATH);
+        try {
+            FileWriter writer = new FileWriter(classListFile, false);
+            writer.write("");
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();

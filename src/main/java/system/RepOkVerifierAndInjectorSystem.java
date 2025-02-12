@@ -19,7 +19,7 @@ public class RepOkVerifierAndInjectorSystem {
         this.invariantClassPath = invariantClassPath;
 
         classFixer = new ClassFixer(classPath, className);
-        classFixer.rewriteClassList();
+        classFixer.writeClassList();
         File classFile = classFixer.generateCopy();
         invariantParser = new InvariantParser(invariantClassPath);
         try {
@@ -31,12 +31,14 @@ public class RepOkVerifierAndInjectorSystem {
 
     public void run() {
         invariantParser.parse();
+        invariantHandler.createRepOk();
         invariantParser.getParsedMethods().forEach(method -> {
             invariantHandler.inject(method);
         });
         invariantHandler.verify();
-        invariantHandler.buildRepOk();
+        invariantHandler.updateRepOk();
         classFixer.copyBack();
         classFixer.deleteCopy();
+        classFixer.deleteClassList();
     }
 }

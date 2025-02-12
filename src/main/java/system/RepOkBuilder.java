@@ -15,16 +15,26 @@ public class RepOkBuilder {
         this.verifiedMethods = new ArrayList<>();
     }
 
-    public void updateOrCreateRepOk() {
+    public void createRepOk() {
+        if (repOkExists()) {
+            return;
+        }
+        MethodDeclaration repOkMethod = new MethodDeclaration()
+            .setName(StringConstants.REPOK_METHOD_NAME)
+            .setType("boolean")
+            .setModifiers(com.github.javaparser.ast.Modifier.Keyword.PUBLIC)
+            .setBody(StaticJavaParser.parseBlock( "{ return true; }"));
+        
+        classEditor.addMethod(repOkMethod);
+        classEditor.writeToFile();
+    }
+
+    public void updateRepOk() {
         StringBuilder repOkBody = generateBody();
         if (repOkBody.length() == 0) {
             return;
         }
-        if (repOkExists()) {
-            appendToRepOk(repOkBody);
-        } else {
-            createRepOk(repOkBody);
-        }
+        appendToRepOk(repOkBody);
         classEditor.writeToFile();
     }
 
@@ -68,14 +78,5 @@ public class RepOkBuilder {
             );
         });
 
-    }
-
-    private void createRepOk(StringBuilder repOkBody) {
-        MethodDeclaration repOkMethod = new MethodDeclaration()
-            .setName(StringConstants.REPOK_METHOD_NAME)
-            .setType("boolean")
-            .setModifiers(com.github.javaparser.ast.Modifier.Keyword.PUBLIC)
-            .setBody(StaticJavaParser.parseBlock( "{" + repOkBody.toString() + " return true }"));
-        classEditor.addMethod(repOkMethod);
     }
 }
