@@ -1,7 +1,10 @@
 package system;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 
@@ -12,16 +15,21 @@ public class InvariantVerifier {
         processBuilder.redirectErrorStream(true);
         try {
             Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder output = new StringBuilder();
+            String line;
+            
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                output.append(line).append("\n");
+            }
+
             int exitCode = process.waitFor();
 
-            if (exitCode == -1) {
-                System.out.println("\u001B[31mERROR\u001B[0m: Check logs.");
-            } else if (exitCode == 0) {
-                System.out.println("\u001B[31mERROR\u001B[0m: Error test generated. Check repOk.");
-            } else {
-                System.out.println("\u001B[32mSUCCESS\u001B[0m: Class invariant verified.");
+            if (exitCode == 1) {
                 verified.addAll(methods);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

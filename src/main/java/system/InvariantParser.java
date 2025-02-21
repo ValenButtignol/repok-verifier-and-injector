@@ -28,6 +28,8 @@ public class InvariantParser {
                 if (method.getNameAsString().equals(StringConstants.REPOK_METHOD_NAME)
                     || method.getNameAsString().startsWith(StringConstants.PROP_METHOD_NAME)) {
                     method.addAnnotation("CheckRep");
+                    if (!method.getParameters().isEmpty())
+                        throw new IllegalArgumentException("Invariant can't have any parameters.");
                 }
                 parsedMethods.add(method);
             });
