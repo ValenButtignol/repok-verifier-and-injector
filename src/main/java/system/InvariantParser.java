@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
 public class InvariantParser {
@@ -30,6 +31,10 @@ public class InvariantParser {
                     method.addAnnotation("CheckRep");
                     if (!method.getParameters().isEmpty())
                         throw new IllegalArgumentException("Invariant can't have any parameters.");
+
+                    method.setModifier(Keyword.PRIVATE, false);
+                    method.setModifier(Keyword.PROTECTED, false);
+                    method.setModifier(Keyword.PUBLIC, true);
                 }
                 parsedMethods.add(method);
             });
