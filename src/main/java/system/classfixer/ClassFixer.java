@@ -2,6 +2,11 @@ package system.classfixer;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.StaticJavaParser;
@@ -17,83 +22,119 @@ import system.StringConstants;
  */
 public class ClassFixer {
 
-    private String classPath;
     private String className;
     private File classFile;
-    private CompilationUnit classCu;
-    private String classCopyPath;
     private File copyFile;
     private Optional<PackageDeclaration> oldPackage;
+    private List<File> copiedFiles;
 
     public ClassFixer(String classPath, String className) {
-        this.classPath = classPath;
         this.className = className;
-        this.classCopyPath = StringConstants.CLASS_FIXER_PATH + className + ".java";
         this.classFile = new File(classPath);
-        try {
-            this.classCu = StaticJavaParser.parse(classFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.copiedFiles = new ArrayList<>();
     }
     
     public File generateCopy() {
-        copyFile = new File(classCopyPath);
-        
-        oldPackage = classCu.getPackageDeclaration();
-        classCu.setPackageDeclaration(StringConstants.PACKAGE_DECL);
-        classCu.addImport("java.util.*");
-        classCu.addImport("randoop.CheckRep");
-        
-        try {
-            FileWriter writer = new FileWriter(copyFile);
-            writer.write(classCu.toString());
-            writer.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        File directory = classFile.getParentFile(); // Get package directory
+        if (directory == null || !directory.isDirectory()) {
+            throw new IllegalArgumentException("Invalid package directory: " + directory);
         }
 
-        return copyFile;
+        for (File file : directory.listFiles()) {
+            if (file.getName().endsWith(".java")) {
+                copyJavaFile(file);
+            }
+        }
+        updatePackageDeclarations();
+        
+        return copyFile; // Return only the copy of the specified class
     }
 
     public void writeClassList() {
-        File classListFile = new File(StringConstants.CLASS_LIST_FILE_PATH);
         try {
-            FileWriter writer = new FileWriter(classListFile);
-            writer.write(StringConstants.PACKAGE_DECL + "." + className + "\n");
-            writer.close();
+            writeToFile(new File(StringConstants.CLASS_LIST_FILE_PATH),
+                StringConstants.PACKAGE_DECL + "." + className + "\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void deleteClassList() {
-        File classListFile = new File(StringConstants.CLASS_LIST_FILE_PATH);
         try {
-            FileWriter writer = new FileWriter(classListFile, false);
-            writer.write("");
-            writer.close();
+            writeToFile(new File(StringConstants.CLASS_LIST_FILE_PATH), "");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void copyBack() {
+        if (copyFile == null) {
+            throw new IllegalStateException("No copy file exists.");
+        }
         try {
             CompilationUnit copyClassCu = StaticJavaParser.parse(copyFile);
             copyClassCu.setPackageDeclaration(oldPackage.orElse(null));
             copyClassCu.getImports().removeIf(i -> i.getNameAsString().equals("randoop.CheckRep"));
 
-            FileWriter writer = new FileWriter(classFile, false);
-            writer.write(copyClassCu.toString());
-            writer.close();
+            writeToFile(classFile, copyClassCu.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteCopy() {
-        copyFile.delete();
+    public void deleteCopies() {
+        for (File file : copiedFiles) {
+            file.delete();
+        }
+        copiedFiles.clear();
+    }
+
+    private void copyJavaFile(File file) {
+        try {
+            File destination = new File(StringConstants.CLASS_FIXER_PATH + file.getName());
+            Files.copy(file.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            copiedFiles.add(destination);
+
+            if (file.getName().equals(className + ".java")) {
+                modifyCopy(destination);
+                copyFile = destination; // Save reference to the modified file
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void modifyCopy(File destination) {
+        try {
+            CompilationUnit cu = StaticJavaParser.parse(destination);
+            oldPackage = cu.getPackageDeclaration();
+            cu.addImport("java.util.*");
+            cu.addImport("randoop.CheckRep");
+            
+            writeToFile(destination, cu.toString());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updatePackageDeclarations() {
+        for (File file : copiedFiles) {
+            try {
+                CompilationUnit cu = StaticJavaParser.parse(file);
+                cu.setPackageDeclaration(StringConstants.PACKAGE_DECL);
+                writeToFile(file, cu.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+        }
+    }
+
+    private void writeToFile(File file, String content) throws IOException {
+        FileWriter writer = new FileWriter(file, false);
+        writer.write(content);
+        writer.close();
     }
 }

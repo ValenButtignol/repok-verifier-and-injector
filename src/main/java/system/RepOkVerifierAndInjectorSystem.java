@@ -38,7 +38,7 @@ public class RepOkVerifierAndInjectorSystem {
         invariantHandler.verify();
         invariantHandler.updateRepOk();
         classFixer.copyBack();
-        classFixer.deleteCopy();
+        classFixer.deleteCopies();
         classFixer.deleteClassList();
     }
 }
