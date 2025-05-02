@@ -29,7 +29,7 @@ public class RepOkManager {
                 .filter(this::isRepOkOrPropMethod)
                 .collect(Collectors.toList());
         
-        return repoks.get(repoks.size() - 1);
+        return repoks.getLast();
     }
 
     private boolean isRepOkOrPropMethod(MethodDeclaration method) {

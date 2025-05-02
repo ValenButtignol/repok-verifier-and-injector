@@ -40,9 +40,8 @@ public class RepOkVerifierAndInjectorSystem {
                 return;
             }
             classEditor.createOrUpdateComposedRepOK();
-        } catch (IOException e) {
+        } catch (Exception e) {
             cleanUp();
-            
             throw new RuntimeException("Failed creating RepOK for class " + targetClassName);
         }
 

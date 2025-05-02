@@ -1,24 +1,23 @@
 package system;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class InvariantParser {
     
-    private File invariantClass;
+    private String invariantClassPath;
     private String invariantSnippet;
     
     public InvariantParser(String invariantClassPath) {
         this.invariantSnippet = "";
-        this.invariantClass = new File(invariantClassPath);
+        this.invariantClassPath = invariantClassPath;
     }
 
     public void parse() {
         String content = "";
         try {
-            content = Files.readString(invariantClass.toPath());
-        } catch (IOException e) {
+            content = Files.readString(Path.of(invariantClassPath));
+        } catch (Exception e) {
             throw new RuntimeException("Error reading RepOK file");
         }
 
