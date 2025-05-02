@@ -4,7 +4,7 @@ TEST_DIR="src/test/java"
 
 # 1. Delete previous test files
 echo "Cleaning test files..."
-rm -f "$TEST_DIR/ErrorTest.java" "$TEST_DIR/ErrorTest0.java" "$TEST_DIR/ErrorTest1.java" "$TEST_DIR/RegressionTest.java" "$TEST_DIR/RegressionTest0.java" "$TEST_DIR/RegressionTest1.java"
+rm -f "$TEST_DIR/ErrorTest.java" "$TEST_DIR/ErrorTest0.java"  "$TEST_DIR/ErrorTest1.java" "$TEST_DIR/ErrorTest2.java" "$TEST_DIR/RegressionTest.java" "$TEST_DIR/RegressionTest0.java" "$TEST_DIR/RegressionTest1.java" "$TEST_DIR/RegressionTest2.java" "$TEST_DIR/RegressionTest3.java"
 
 gradle build > logs/compile.log 2>&1
 if [ $? -ne 0 ]; then

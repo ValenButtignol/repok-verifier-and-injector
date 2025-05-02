@@ -1,44 +1,58 @@
 package system;
 
 import java.io.File;
+import java.io.IOException;
 
-import system.classfixer.ClassFixer;
+import system.editor.JavaClassEditor;
 
 public class RepOkVerifierAndInjectorSystem {
 
-    private InvariantHandler invariantHandler;
+    // private InvariantHandler invariantHandler;
     private InvariantParser invariantParser;
-    private ClassFixer classFixer;
-    private String classPath;
-    private String className;
+    private ClassProcessor classProcessor;
+    private JavaClassEditor classEditor;
+    private InvariantVerifier invariantVerifier;
+    private String targetClassPath;
+    private String targetClassName;
     private String invariantClassPath;
 
-    public RepOkVerifierAndInjectorSystem(String classPath, String className, String invariantClassPath){
-        this.classPath = classPath;
-        this.className = className;
+    public RepOkVerifierAndInjectorSystem(String targetClassPath, String targetClassName, String invariantClassPath) {
+        this.targetClassPath = targetClassPath;
+        this.targetClassName = targetClassName;
         this.invariantClassPath = invariantClassPath;
 
-        classFixer = new ClassFixer(classPath, className);
-        classFixer.writeClassList();
-        File classFile = classFixer.generateCopy();
+        classProcessor = new ClassProcessor(targetClassPath, targetClassName);
+        classProcessor.processClassList();
+        File targetClassCopy = classProcessor.generateCopy();
+
         invariantParser = new InvariantParser(invariantClassPath);
-        try {
-            invariantHandler = new InvariantHandler(classFile, className);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        classEditor = new JavaClassEditor(targetClassCopy.toPath(), targetClassName);
+        invariantVerifier = new InvariantVerifier();
     }
 
     public void run() {
         invariantParser.parse();
-        invariantHandler.createRepOk();
-        invariantParser.getParsedMethods().forEach(method -> {
-            invariantHandler.inject(method);
-        });
-        invariantHandler.verify();
-        invariantHandler.updateRepOk();
-        classFixer.copyBack();
-        classFixer.deleteCopies();
-        classFixer.deleteClassList();
+        try {
+            classEditor.injectSnippet(invariantParser.getInvariantSnippet());
+            classEditor.adjustClass();
+            if (!invariantVerifier.verify()) {
+                cleanUp();
+                return;
+            }
+            classEditor.createOrUpdateComposedRepOK();
+        } catch (IOException e) {
+            cleanUp();
+            
+            throw new RuntimeException("Failed creating RepOK for class " + targetClassName);
+        }
+
+        classProcessor.copyBack();
+        cleanUp();
     }
+
+    private void cleanUp() {
+        classProcessor.deleteCopy();
+        classProcessor.cleanClassList();
+    }
+
 }

@@ -2,15 +2,10 @@ package system;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-
-import com.github.javaparser.ast.body.MethodDeclaration;
 
 public class InvariantVerifier {
-    public List<MethodDeclaration> verify(List<MethodDeclaration> methods) {
-        List<MethodDeclaration> verified = new ArrayList<>();
+    public boolean verify() {
+        boolean passed = false;
         ProcessBuilder processBuilder = new ProcessBuilder(StringConstants.RANDOOP_SCRIPT_PATH);
         processBuilder.redirectErrorStream(true);
         try {
@@ -27,12 +22,12 @@ public class InvariantVerifier {
             int exitCode = process.waitFor();
 
             if (exitCode == 1) {
-                verified.addAll(methods);
+                passed = true;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return verified;
+        return passed;
     }
 }
