@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class SnippetInjector {
-    private final Path targetClassPath;
+    private Path targetClassPath;
 
     public SnippetInjector(Path targetClassPath) {
         this.targetClassPath = targetClassPath;

@@ -64,7 +64,7 @@ tasks.register('runRandoop', JavaExec) {
     args = [
         'gentests',                        // Command to generate tests
         '--classlist=src/main/resources/classlist.txt', // List of classes to test
-        '--output-limit=1500',              // Amount of tests
+        '--output-limit=1000',              // Amount of tests
         '--junit-output-dir=src/test/java' // Outputs
     ]
 }

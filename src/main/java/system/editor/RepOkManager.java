@@ -29,6 +29,9 @@ public class RepOkManager {
                 .filter(this::isRepOkOrPropMethod)
                 .collect(Collectors.toList());
         
+        if (repoks.isEmpty())
+            throw new RuntimeException("Invariant not found");
+
         return repoks.getLast();
     }
 

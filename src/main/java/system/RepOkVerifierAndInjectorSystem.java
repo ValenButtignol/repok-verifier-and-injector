@@ -1,7 +1,6 @@
 package system;
 
 import java.io.File;
-import java.io.IOException;
 
 import system.editor.JavaClassEditor;
 
@@ -31,8 +30,8 @@ public class RepOkVerifierAndInjectorSystem {
     }
 
     public void run() {
-        invariantParser.parse();
         try {
+            invariantParser.parse();
             classEditor.injectSnippet(invariantParser.getInvariantSnippet());
             classEditor.adjustClass();
             if (!invariantVerifier.verify()) {
@@ -42,7 +41,8 @@ public class RepOkVerifierAndInjectorSystem {
             classEditor.createOrUpdateComposedRepOK();
         } catch (Exception e) {
             cleanUp();
-            throw new RuntimeException("Failed creating RepOK for class " + targetClassName);
+            System.err.println("\u001B[31m ERROR\u001B[0m :Failed creating RepOK for class " + targetClassName);
+            return ;
         }
 
         classProcessor.copyBack();
